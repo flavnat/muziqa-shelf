@@ -1,6 +1,5 @@
 # Node modules
 node_modules/
-package-lock.json
 
 
 # Build output
@@ -37,3 +36,8 @@ Thumbs.db
 
 # Babel transpilation artifacts 
 lib/
+
+# Optional npm/yarn/pnpm lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
