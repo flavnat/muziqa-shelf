@@ -37,7 +37,7 @@ const ErrorMessage = styled.p`
 
 const SubmitButton = styled.button`
   padding: 10px 16px;
-  background-color: #4caf50;
+  background-color: #6e7f6e;
   color: white;
   border: none;
   font-weight: 600;
@@ -46,7 +46,7 @@ const SubmitButton = styled.button`
   transition: background 0.2s ease;
 
   &:hover {
-    background-color: #45a049;
+    background-color: #436445;
   }
 `;
 
@@ -57,7 +57,7 @@ const ModalContainer = styled.div`
   color: #fff;
   border-radius: 12px;
   padding: 24px 32px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -118,7 +118,8 @@ export default function EditSongModal({ song, onClose, onEdit }) {
     if (!album) newErrors.album = "Album is required";
     if (!genre) newErrors.genre = "Genre is required";
     if (!year) newErrors.year = "Year is required";
-    else if (!/^\d{4}$/.test(year)) newErrors.year = "Enter a valid year (e.g., 2024)";
+    else if (!/^\d{4}$/.test(year))
+      newErrors.year = "Enter a valid year (e.g., 2024)";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

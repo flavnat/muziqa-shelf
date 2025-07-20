@@ -25,6 +25,7 @@
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
+    "@svgr/webpack": "^8.1.0",
     "babel-loader": "^10.0.0",
     "babel-plugin-styled-components": "^2.1.4",
     "clean-webpack-plugin": "^4.0.0",

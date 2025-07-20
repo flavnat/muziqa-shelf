@@ -24,7 +24,6 @@ module.exports = {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
             },
-            // Image files (PNG, JPG, GIF)
             {
                 test: /\.(png|jpe?g|gif)$/i,
                 use: [
@@ -37,7 +36,6 @@ module.exports = {
                     },
                 ],
             },
-            // SVG files
             {
                 test: /\.svg$/i,
                 use: [

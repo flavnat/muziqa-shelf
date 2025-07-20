@@ -1,31 +1,17 @@
+// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import "./styles/global.css"
-import createSagaMiddleware from 'redux-saga';
-import { configureStore } from '@reduxjs/toolkit';
+import './styles/global.css';
 import { Provider } from 'react-redux';
-import songsReducer from './features/songs/slice'
-import songsSaga from './features/songs/saga'
+import store from './store/store';
+import { startMirageIfNeeded } from './mirage/init';
 
-
-const { makeServer } = require('./mirage/server');
-makeServer();
-
-const saga = createSagaMiddleware()
-const store = configureStore({
-    reducer: {
-        songs: songsReducer
-    },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saga)
-
-})
-
-saga.run(songsSaga)
+startMirageIfNeeded();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
+  <Provider store={store}>
+    <App />
+  </Provider>
 );

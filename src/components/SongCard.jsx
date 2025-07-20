@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import CdIcon from "../assets/icons/cd.svg";
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,9 +42,30 @@ const AlbumArt = styled.div`
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: #6b6b6b;
   flex-shrink: 0;
   margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 56px;
+    height: 56px;
+    transition: transform 1s linear;
+  }
+
+  ${Wrapper}:hover & svg {
+    animation: spin 4s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
   @media (max-width: 600px) {
     margin-right: 0;
@@ -148,11 +170,7 @@ const ActionButton = styled.div`
     border-radius: 6px;
     transition: background-color 0.2s ease;
     font-size: 1rem;
-    min-width: 60px;
-
-    &:hover {
-      background-color: #666;
-    }
+    width: 70px;
   }
 
   @media (max-width: 600px) {
@@ -183,6 +201,22 @@ const DeleteButton = styled.button`
   }
 `;
 
+const EditButton = styled.button`
+  background-color: #a4a1a1;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px 10px;
+  font-size: 1rem;
+  min-width: 60px;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #817f7f;
+  }
+`;
+
 export default function SongCard({
   title,
   album,
@@ -195,7 +229,9 @@ export default function SongCard({
   return (
     <Wrapper>
       <Card>
-        <AlbumArt />
+        <AlbumArt>
+          <CdIcon />
+        </AlbumArt>
         <InfoLeft>
           <TitleAlbum>
             {title} | {album}
@@ -208,7 +244,7 @@ export default function SongCard({
         </InfoRight>
       </Card>
       <ActionButton className="actions">
-        <button onClick={onEdit}>Edit</button>
+        <EditButton onClick={onEdit}>Edit</EditButton>
         <DeleteButton onClick={onDelete}>Delete</DeleteButton>
       </ActionButton>
     </Wrapper>

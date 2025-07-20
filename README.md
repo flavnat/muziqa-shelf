@@ -1,4 +1,8 @@
+
+
 # Muziqa Shelf
+
+<img src="./public/muziqa-shelf-preview.png" alt="Muziqa Shelf UI Preview" width="600" />
 
 A full-stack music library management app built with React, Redux Toolkit, Redux-Saga, MirageJS, and Styled Components.
 
@@ -36,18 +40,19 @@ A full-stack music library management app built with React, Redux Toolkit, Redux
    ```bash
    npm install
    ```
-3. **Create a `.env` file in the project root:**
-   ```env
-   API_BASE_URL=/api
+3. **Copy the example environment file and create your own .env:**
+   ```bash
+   cp .env.example .env
    ```
-   - Change `API_BASE_URL` to your real backend URL when deploying (e.g., `https://your-backend.com/api`).
-4. **Start the development server:**
+
+- For development, ensure your environment is set to `NODE_ENV=development` (this is usually handled automatically when running `npm start`).
+1. **Start the development server:**
    ```bash
    npm start
    ```
    The app will open at [http://localhost:3000](http://localhost:3000).
 
-5. **Build for production:**
+2. **Build for production:**
    ```bash
    npm run build
    ```
@@ -242,31 +247,18 @@ If you want to add more file types (like images or SVGs), you can add more rules
 
 ---
 
-## Styling & Responsiveness
+## Styling
 
 - **Styled Components** for component-level styles and media queries.
 - **Global CSS** for base styles.
-- Fully responsive for mobile and desktop.
-
----
-
-## Environment Variables
-
-- Create a `.env` file in the project root.
-- Example:
-  ```env
-  API_BASE_URL=/api
-  ```
-- The app uses this variable for all API requests. Change it to your real backend URL when deploying.
-- In your code, access it with `process.env.API_BASE_URL` (Webpack replaces this at build time).
 
 ---
 
 ## MirageJS Usage
 
-- MirageJS is started in `src/index.js`.
-- **Best Practice:**
-  - Start MirageJS only in development:
+MirageJS is started in `src/mirage/init.js`.
+  
+- Start MirageJS only in development:
     ```js
     if (process.env.NODE_ENV === "development") {
       const { makeServer } = require("./mirage/server");
@@ -292,6 +284,4 @@ If you want to add more file types (like images or SVGs), you can add more rules
 ## Commit History & Contribution
 
 - Clear commit messages (e.g., `feat: add Redux store`, `fix: API error handling`).
-- Contributions welcome via pull requests.
-
 ---
