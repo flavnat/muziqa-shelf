@@ -1,15 +1,39 @@
 import styled from "@emotion/styled";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./layouts/Header";
 import SongCard from "./components/SongCard";
 import { useDispatch, useSelector } from "react-redux";
-import { getSongsFetch , setPage } from "./songState";
+import {
+  addSongFetch,
+  deleteSongFetch,
+  editSongFetch,
+  getSongsFetch,
+  setPage,
+} from "./features/songs/slice";
+import AddSongModal from "./components/AddSongModal";
+import EditSongModal from "./components/EditSongModal";
+import DeleteSongModal from "./components/DeleteSongModal";
 
 function App() {
   const dispatch = useDispatch();
-  const { songs, loading, error, page, totalPages } = useSelector(
+  const { songs, loading, error, page, totalPages, isAddingSong } = useSelector(
     (state) => state.songs
   );
+
+  const [, forceUpdate] = useState();
+
+  useEffect(() => {
+    forceUpdate({});
+  }, [songs]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedSong, setSelectedSong] = useState(null);
+
+  useEffect(() => {
+    console.log("Songs updated in App.jsx:", songs);
+  }, [songs]);
 
   useEffect(() => {
     dispatch(getSongsFetch({ page }));
@@ -23,7 +47,30 @@ function App() {
     if (page > 1) dispatch(setPage(page - 1));
   };
 
-  if (loading) return <p style={{background: yellow}}>Loading...</p>;
+  const handleAddSong = (song) => {
+    dispatch(addSongFetch(song));
+  };
+  const handleEditSong = (song) => {
+    setSelectedSong(song);
+    setIsEditModalOpen(true);
+  };
+
+  const handleConfirmEdit = (updatedSong) => {
+    dispatch(editSongFetch(updatedSong));
+    setIsEditModalOpen(false);
+  };
+
+  const handleDeleteSong = (songId) => {
+    setSelectedSong({ id: songId });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = (songId) => {
+    dispatch(deleteSongFetch(songId));
+    setIsDeleteModalOpen(false);
+  };
+
+  if (loading) return <p style={{ background: yellow }}>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -31,6 +78,8 @@ function App() {
       <div
         style={{ background: "#333333", color: "#ffffff", minHeight: "100vh" }}
       >
+        <button onClick={() => setIsModalOpen(true)}>Add Song</button>
+
         <table>
           <thead>
             <tr>
@@ -47,6 +96,12 @@ function App() {
                 <td>{song.artist}</td>
                 <td>{song.album}</td>
                 <td>{song.year}</td>
+                <td>
+                  <button onClick={() => handleEditSong(song)}>Edit</button>
+                  <button onClick={() => handleDeleteSong(song.id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -65,6 +120,28 @@ function App() {
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <AddSongModal
+          onClose={() => setIsModalOpen(false)}
+          onAdd={handleAddSong}
+        />
+      )}
+
+      {isEditModalOpen && selectedSong && (
+        <EditSongModal
+          song={selectedSong}
+          onClose={() => setIsEditModalOpen(false)}
+          onEdit={handleConfirmEdit}
+        />
+      )}
+
+      {isDeleteModalOpen && selectedSong && (
+        <DeleteSongModal
+          songId={selectedSong.id}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onDelete={handleConfirmDelete}
+        />
+      )}
     </>
   );
 }

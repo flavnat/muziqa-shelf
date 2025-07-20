@@ -5,8 +5,8 @@ import "./styles/global.css"
 import createSagaMiddleware from 'redux-saga';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import songsReducer from './songState'
-import songsSaga from './songSaga';
+import songsReducer from './features/songs/slice'
+import songsSaga from './features/songs/saga'
 
 
 const { makeServer } = require('./mirage/server');
