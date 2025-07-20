@@ -285,3 +285,11 @@ MirageJS is started in `src/mirage/init.js`.
 
 - Clear commit messages (e.g., `feat: add Redux store`, `fix: API error handling`).
 ---
+
+### ⚠️ Mock Backend Notice
+
+This app uses **MirageJS** to simulate a backend during development.  
+All song data is stored in-memory and:
+- Will reset on page refresh.
+- Is not saved to a database.
+- Exists only in the browser session.
