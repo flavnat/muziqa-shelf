@@ -19,6 +19,10 @@ module.exports = {
                     },
                 },
                 type: 'javascript/auto',
+            },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
             }
         ],
     },
