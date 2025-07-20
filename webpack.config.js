@@ -23,7 +23,32 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
-            }
+            },
+            // Image files (PNG, JPG, GIF)
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[hash].[ext]',
+                            outputPath: 'images',
+                        },
+                    },
+                ],
+            },
+            // SVG files
+            {
+                test: /\.svg$/i,
+                use: [
+                    {
+                        loader: '@svgr/webpack',
+                        options: {
+                            svgo: true,
+                        },
+                    },
+                ],
+            },
         ],
     },
     resolve: {
