@@ -22,18 +22,31 @@ export function makeServer({ environment = 'development' } = {}) {
                 "Dream On", "American Pie", "Enter Sandman", "Africa"
             ];
 
-            const artists = ["Queen", "John Lennon", "Led Zeppelin", "Eagles", "The Beatles", "Nirvana", "Bob Dylan", "Marvin Gaye", "Guns N’ Roses", "Michael Jackson"];
-            const albums = ["Greatest Hits", "Legendary Tracks", "The Classics", "Essential Rock", "Timeless Tunes"];
+            const artists = [
+                "Queen", "John Lennon", "Led Zeppelin", "Eagles", "The Beatles",
+                "Nirvana", "Bob Dylan", "Marvin Gaye", "Guns N’ Roses", "Michael Jackson"
+            ];
+
+            const albums = [
+                "Greatest Hits", "Legendary Tracks", "The Classics", "Essential Rock", "Timeless Tunes"
+            ];
+
+            const genres = [
+                "Rock", "Pop", "Hard Rock", "Soft Rock", "Folk Rock",
+                "Grunge", "Soul", "Classic Rock", "Alternative", "Metal"
+            ];
 
             for (let i = 0; i < 40; i++) {
                 server.create('song', {
-                    id: i + 1,
+                    id: i + 1,  
                     title: titles[i % titles.length],
                     artist: artists[i % artists.length],
                     album: albums[i % albums.length],
                     year: 1970 + (i % 50),
+                    genre: genres[i % genres.length],
                 });
             }
+
         },
         routes() {
             this.namespace = 'api';

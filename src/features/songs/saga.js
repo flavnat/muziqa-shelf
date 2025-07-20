@@ -32,8 +32,6 @@ function* editSongSaga(action) {
     try {
         const response = yield call(axios.put, `/api/songs/${action.payload.id}`, action.payload);
         yield put(editSongSuccess(response.data));
-
-        // Re-fetch the current page after editing
         const page = yield select((state) => state.songs.page);
         yield put(getSongsFetch({ page }));
     } catch (error) {

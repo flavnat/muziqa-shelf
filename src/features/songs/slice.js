@@ -39,7 +39,7 @@ export const songSlice = createSlice({
         },
         addSongSuccess: (state, action) => {
             state.isAddingSong = false;
-            state.songs.unshift(action.payload); // Optimistic add
+            state.songs.unshift(action.payload);
             state.total += 1;
             state.totalPages = Math.ceil(state.total / state.limit);
         },
@@ -47,7 +47,6 @@ export const songSlice = createSlice({
             state.isAddingSong = false;
             state.error = action.payload;
         },
-        // Edit Song
         editSongFetch: (state) => {
             state.isEditingSong = true;
         },
@@ -62,7 +61,6 @@ export const songSlice = createSlice({
             state.isEditingSong = false;
             state.error = action.payload;
         },
-        // Delete Song
         deleteSongFetch: (state) => {
             state.isDeletingSong = true;
         },

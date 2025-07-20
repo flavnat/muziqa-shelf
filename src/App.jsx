@@ -1,55 +1,87 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import Header from "./layouts/Header";
 import SongCard from "./components/SongCard";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addSongFetch,
-  deleteSongFetch,
-  editSongFetch,
-  getSongsFetch,
-  setPage,
-} from "./features/songs/slice";
+import SongList from "./components/SongList";
 import AddSongModal from "./components/AddSongModal";
+import Pagination from "./components/Pagination";
+import { useDispatch, useSelector } from "react-redux";
+import { addSongFetch, deleteSongFetch, editSongFetch, getSongsFetch, setPage } from "./features/songs/slice";
+import Loader from "./components/Loader";
 import EditSongModal from "./components/EditSongModal";
 import DeleteSongModal from "./components/DeleteSongModal";
+import Footer from "./layouts/Footer";
 
-function App() {
+const Page = styled.div`
+  background: #333333;
+  color: #ffffff;
+  min-height: 100vh;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 650px;
+`;
+const AddButton = styled.button`
+  background-color: #6e7f6e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  align-self: flex-end;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: #436445;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 500px) {
+    align-self: stretch;
+  }
+`;
+
+export default function App() {
   const dispatch = useDispatch();
-  const { songs, loading, error, page, totalPages, isAddingSong } = useSelector(
-    (state) => state.songs
-  );
-
-  const [, forceUpdate] = useState();
+  const { songs, loading, error, page, totalPages, isAddingSong, isLoading } =
+    useSelector((state) => state.songs);
 
   useEffect(() => {
-    forceUpdate({});
-  }, [songs]);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedSong, setSelectedSong] = useState(null);
-
-  useEffect(() => {
-    console.log("Songs updated in App.jsx:", songs);
-  }, [songs]);
-
-  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     dispatch(getSongsFetch({ page }));
+    console.log(songs);
   }, [dispatch, page]);
 
-  const handleNext = () => {
-    if (page < totalPages) dispatch(setPage(page + 1));
-  };
-
-  const handlePrev = () => {
-    if (page > 1) dispatch(setPage(page - 1));
-  };
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedSong, setSelectedSong] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleAddSong = (song) => {
     dispatch(addSongFetch(song));
   };
+
   const handleEditSong = (song) => {
     setSelectedSong(song);
     setIsEditModalOpen(true);
@@ -70,59 +102,40 @@ function App() {
     setIsDeleteModalOpen(false);
   };
 
-  if (loading) return <p style={{ background: yellow }}>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
     <>
-      <div
-        style={{ background: "#333333", color: "#ffffff", minHeight: "100vh" }}
-      >
-        <button onClick={() => setIsModalOpen(true)}>Add Song</button>
+      <Page>
+        <ContentWrapper>
+          <HeaderWrapper>
+            <Header />
+            <AddButton onClick={() => setIsAddModalOpen(true)}>
+              {" "}
+              + Add Song
+            </AddButton>
+          </HeaderWrapper>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <SongList
+                songs={songs}
+                onEdit={handleEditSong}
+                onDelete={handleDeleteSong}
+              />
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={(newPage) => dispatch(setPage(newPage))}
+              />
+            </>
+          )}
+        </ContentWrapper>
+        {/* <Footer /> */}
+      </Page>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Artist</th>
-              <th>Album</th>
-              <th>Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            {songs.map((song) => (
-              <tr key={song.id}>
-                <td>{song.title}</td>
-                <td>{song.artist}</td>
-                <td>{song.album}</td>
-                <td>{song.year}</td>
-                <td>
-                  <button onClick={() => handleEditSong(song)}>Edit</button>
-                  <button onClick={() => handleDeleteSong(song.id)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div>
-          <button onClick={handlePrev} disabled={page === 1}>
-            Previous
-          </button>
-          <span>
-            {" "}
-            Page {page} of {totalPages}{" "}
-          </span>
-          <button onClick={handleNext} disabled={page === totalPages}>
-            Next
-          </button>
-        </div>
-      </div>
-      {isModalOpen && (
+      {isAddModalOpen && (
         <AddSongModal
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => setIsAddModalOpen(false)}
           onAdd={handleAddSong}
         />
       )}
@@ -142,8 +155,7 @@ function App() {
           onDelete={handleConfirmDelete}
         />
       )}
+
     </>
   );
 }
-
-export default App;

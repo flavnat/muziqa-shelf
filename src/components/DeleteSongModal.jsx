@@ -1,39 +1,82 @@
-import styled from '@emotion/styled';
-import React from 'react';
+import React from "react";
+import styled from "styled-components";
+import BaseModal from "./BaseModal";
 
+const ModalTitle = styled.h2`
+  margin: 0;
+  font-size: 1.5rem;
+  text-align: center;
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+  }
 `;
 
-const ModalContent = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
+const Message = styled.p`
+  font-size: 1rem;
+  margin-bottom: 0;
+  text-align: center;
+  color: #ccc;
 `;
 
-const Button = styled.button`
-  margin: 10px 5px;
-  padding: 8px 12px;
+const ErrorMessage = styled.p`
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: -12px;
+  margin-bottom: 10px;
+`;
+
+const SubmitButton = styled.button`
+  padding: 10px 16px;
+  background-color: #e74c3c;
+  color: white;
   border: none;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background-color: #c0392b;
+  }
+`;
+
+const CancelButton = styled(SubmitButton)`
+  background-color: #777;
+
+  &:hover {
+    background-color: #555;
+  }
+`;
+
+const ModalActions = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 20px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0.5rem;
+    button {
+      width: 100%;
+      font-size: 1rem;
+      padding: 10px 0;
+    }
+  }
 `;
 
 export default function DeleteSongModal({ songId, onClose, onDelete }) {
   return (
-    <ModalOverlay onClick={onClose}>
-      <ModalContent onClick={(e) => e.stopPropagation()}>
-        <h3>Are you sure you want to delete this song?</h3>
-        <Button style={{ background: 'red' }} onClick={() => onDelete(songId)}>Delete</Button>
-        <Button onClick={onClose}>Cancel</Button>
-      </ModalContent>
-    </ModalOverlay>
+    <BaseModal title="Delete Song" subTitle={"This action cannot be undone."} onClose={onClose}>
+      <>
+        {/* <ModalTitle>Confirm Deletion</ModalTitle> */}
+        {/* <Message>Are you sure you want to delete this song?</Message> */}
+        <ModalActions>
+          <SubmitButton onClick={() => onDelete(songId)}>Delete</SubmitButton>
+          <CancelButton onClick={onClose}>Cancel</CancelButton>
+        </ModalActions>
+      </>
+    </BaseModal>
   );
 }

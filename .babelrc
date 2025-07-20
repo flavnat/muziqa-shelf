@@ -1,8 +1,6 @@
 {
-    "plugins": [
-        "babel-plugin-styled-components",
-        {
-            "displayName": false
-        }
-    ]
+  "presets": [],
+  "plugins": [
+    "babel-plugin-styled-components"
+  ]
 }
