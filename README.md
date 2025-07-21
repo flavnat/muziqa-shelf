@@ -11,8 +11,8 @@ A full-stack music library management app built with React, Redux Toolkit, Redux
 ## Features
 
 - **Paginated Song List:** View songs with title, artist, album, year, and genre.
-- **CRUD Operations:** Add, edit, and delete songs via API calls.
-- **Responsive UI:** Styled with Styled Components and CSS for mobile and desktop.
+- **CRUD Operations:** Add, edit, and delete songs. New songs appear at the top of the list.
+- **UI** Styled with Styled Components and CSS for mobile and desktop.
 - **State Management:** Redux Toolkit for global state, Redux-Saga for side effects.
 - **Custom Webpack Setup:** No CRA, manual configuration with environment variables and custom rules.
 - **Mock Backend:** MirageJS simulates a REST API for local development.
@@ -148,7 +148,7 @@ These tell Webpack how to handle different file types:
 
 ### 3. Resolve
 ```js
-resolve: {
+resolve: {****
     extensions: ['.js', '.jsx'],
 },
 ```

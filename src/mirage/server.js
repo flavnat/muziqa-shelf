@@ -14,12 +14,7 @@ export function makeServer({ environment = 'development' } = {}) {
                 "Bohemian Rhapsody", "Imagine", "Stairway to Heaven", "Hotel California",
                 "Hey Jude", "Smells Like Teen Spirit", "Like a Rolling Stone", "What’s Going On",
                 "Sweet Child O’ Mine", "Billie Jean", "Comfortably Numb", "Let It Be",
-                "Born to Run", "Purple Rain", "Wish You Were Here", "Every Breath You Take",
-                "Losing My Religion", "Hallelujah", "I Still Haven’t Found What I’m Looking For",
-                "Wonderwall", "Creep", "Back in Black", "Nothing Else Matters", "Yesterday",
-                "Highway to Hell", "November Rain", "Kashmir", "Paint It Black", "Knocking on Heaven’s Door",
-                "Zombie", "Come As You Are", "Blackbird", "Time", "Baba O’Riley", "Paranoid",
-                "Dream On", "American Pie", "Enter Sandman", "Africa"
+                "Born to Run", "Purple Rain", "Wish You Were Here", 
             ];
 
             const artists = [
@@ -36,7 +31,7 @@ export function makeServer({ environment = 'development' } = {}) {
                 "Grunge", "Soul", "Classic Rock", "Alternative", "Metal"
             ];
 
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 15; i++) {
                 server.create('song', {
                     id: i + 1,  
                     title: titles[i % titles.length],
@@ -60,8 +55,10 @@ export function makeServer({ environment = 'development' } = {}) {
                 const start = (page - 1) * limit;
                 const end = start + limit;
 
+                const reversedSongs = allSongs.models.slice().reverse();
+
                 return {
-                    data: allSongs.models.slice(start, end),
+                    data: reversedSongs.slice(start, end),
                     total,
                     page,
                     limit,
