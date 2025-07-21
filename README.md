@@ -52,10 +52,6 @@ A full-stack music library management app built with React, Redux Toolkit, Redux
    ```
    The app will open at [http://localhost:3000](http://localhost:3000).
 
-2. **Build for production:**
-   ```bash
-   npm run build
-   ```
 
 ---
 
@@ -66,7 +62,6 @@ All endpoints are prefixed with `/api` (or your `API_BASE_URL`).
 | Method | Endpoint         | Description                | Body / Params         |
 |--------|------------------|---------------------------|----------------------|
 | GET    | `/songs`         | List songs (paginated)    | `?page=1&limit=10`   |
-| GET    | `/songs/:id`     | Get song by ID            |                      |
 | POST   | `/songs`         | Create new song           | `{ title, artist, album, year, genre }` |
 | PUT    | `/songs/:id`     | Update song by ID         | `{ title, artist, album, year, genre }` |
 | DELETE | `/songs/:id`     | Delete song by ID         |                      |
