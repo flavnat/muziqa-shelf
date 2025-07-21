@@ -33,7 +33,7 @@ A full-stack music library management app built with React, Redux Toolkit, Redux
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/flavnat/muziqa-shelf.git
    cd muziqa-shelf
    ```
 2. **Install dependencies:**
