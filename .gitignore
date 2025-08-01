@@ -44,4 +44,7 @@ pnpm-lock.yaml
 
 
 #Sqlite db 
-database.sqlite
+server/database.sqlite
+
+# General All Sqlite DB
+**/*.sqlite
