@@ -41,3 +41,10 @@ lib/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+
+#Sqlite db 
+server/database.sqlite
+
+# General All Sqlite DB
+**/*.sqlite
