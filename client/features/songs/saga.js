@@ -5,10 +5,10 @@ import axios from 'axios';
 
 function* fetchSongsSaga(action) {
     try {
-        const { page = 1, limit = 10 } = action.payload;
+        const { page = 1, limit = 6 } = action.payload;
         const response = yield call(
             axios.get,
-            `/api/songs?page=${page}&limit=${limit}`
+            `http://localhost:4000/songs?limit=${limit}&page=${page}`
         );
         yield put(getSongsSuccess(response.data));
     } catch (error) {
@@ -18,7 +18,7 @@ function* fetchSongsSaga(action) {
 
 function* addSongSaga(action) {
     try {
-        const response = yield call(axios.post, '/api/songs', action.payload);
+        const response = yield call(axios.post, 'http://localhost:4000/song', action.payload);
         yield put(addSongSuccess(response.data));
 
         const page = yield select((state) => state.songs.page);
@@ -30,7 +30,7 @@ function* addSongSaga(action) {
 
 function* editSongSaga(action) {
     try {
-        const response = yield call(axios.put, `/api/songs/${action.payload.id}`, action.payload);
+        const response = yield call(axios.put, `http://localhost:4000/song/${action.payload.id}`, action.payload);
         yield put(editSongSuccess(response.data));
         const page = yield select((state) => state.songs.page);
         yield put(getSongsFetch({ page }));
@@ -41,7 +41,7 @@ function* editSongSaga(action) {
 
 function* deleteSongSaga(action) {
     try {
-        yield call(axios.delete, `/api/songs/${action.payload}`);
+        yield call(axios.delete, `http://localhost:4000/song/${action.payload}`);
         yield put(deleteSongSuccess(action.payload));
     } catch (error) {
         yield put(deleteSongFailure(error.message));
