@@ -52,7 +52,7 @@ export const songSlice = createSlice({
         },
         editSongSuccess: (state, action) => {
             state.isEditingSong = false;
-            const index = state.songs.findIndex(song => song.id === action.payload.id);
+            const index = state.songs.findIndex(song => song._id === action.payload._id);
             if (index !== -1) {
                 state.songs[index] = action.payload;
             }
@@ -66,7 +66,7 @@ export const songSlice = createSlice({
         },
         deleteSongSuccess: (state, action) => {
             state.isDeletingSong = false;
-            state.songs = state.songs.filter(song => song.id !== action.payload);
+            state.songs = state.songs.filter(song => song._id !== action.payload);
             state.total -= 1;
             state.totalPages = Math.ceil(state.total / state.limit);
         },

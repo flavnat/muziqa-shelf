@@ -26,7 +26,7 @@ export default function SongList({ songs, onEdit, onDelete }) {
           year={song.year}
           genre={song.genre}
           onEdit={() => onEdit(song)}
-          onDelete={() => onDelete(song.id)}
+          onDelete={() => onDelete(song._id)}
         />
       ))}
     </SongListContainer>

@@ -1,17 +1,10 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = require('../config/db');
+const mongoose = require('mongoose');
+const SongSchema = new mongoose.Schema({
+  title: String,
+  artist: String,
+  album: String,
+  genre: String,
+  year: Number,
+}, { timestamps: true });
 
-class Song extends Model {}
-
-Song.init({
-  title: DataTypes.STRING,
-  artist: DataTypes.STRING,
-  album: DataTypes.STRING,
-  genre: DataTypes.STRING,
-  year: DataTypes.INTEGER,
-}, {
-  sequelize,
-  modelName: 'song',
-});
-
-module.exports = Song;
+module.exports = mongoose.model('Song', SongSchema);
