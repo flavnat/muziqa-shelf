@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import CdIcon from "../assets/icons/cd.svg";
 
 const Wrapper = styled.div`
   display: flex;
@@ -230,7 +229,7 @@ export default function SongCard({
     <Wrapper>
       <Card>
         <AlbumArt>
-          <CdIcon />
+          {/* <CdIcon /> */}
         </AlbumArt>
         <InfoLeft>
           <TitleAlbum>

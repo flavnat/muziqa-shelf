@@ -1,50 +1,16 @@
-# Node modules
+# Ignore global dependencies if any
 node_modules/
 
-
-# Build output
-dist/
-build/
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Webpack cache
-.cache/
-webpack-cache/
-*.cache
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# IDE/editor settings
+# Ignore editor/OS stuff
 .vscode/
 .idea/
-*.sw?
-
-# OS files
 .DS_Store
 Thumbs.db
 
-# Misc
+# Global logs
 *.log
-*.tgz
 
-# Babel transpilation artifacts 
-lib/
-
-# Optional npm/yarn/pnpm lock files
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-
-#Sqlite db 
-server/database.sqlite
-
-# General All Sqlite DB
-**/*.sqlite
+# Ignore built files if you're bundling both client/server here
+/client/build/
+/client/dist/
+/server/dist/

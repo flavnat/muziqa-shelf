@@ -2,7 +2,7 @@
 
 # Muziqa Shelf
 
-<img src="./public/muziqa-shelf-preview.png" alt="Muziqa Shelf UI Preview" width="600" />
+<img src="./client/public/muziqa-shelf-preview.png" alt="Muziqa Shelf UI Preview" width="600" />
 
 A full-stack music library management app built with React, Redux Toolkit, Redux-Saga, MirageJS, and Styled Components.
 

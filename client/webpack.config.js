@@ -4,15 +4,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { webpack } = require('webpack');
 
 module.exports = {
-    entry: './client/index.js',
+    entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
+        clean: true,
     },
     module: {
         rules: [
             {
-                test: /\.[jt]sx?$/,
+                test: /\.[j]sx?$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
@@ -57,8 +58,8 @@ module.exports = {
     plugins: [
         new Dotenv(),
         new HtmlWebpackPlugin({
-            template: './client/public/index.html',
-            filename: 'index.html',                  
+            template: './public/index.html',
+            filename: 'index.html',
             inject: 'body',
         })
     ],
@@ -69,5 +70,6 @@ module.exports = {
         port: 3000,
         open: true,
         hot: true,
+        historyApiFallback: true,
     },
 };
