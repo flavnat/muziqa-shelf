@@ -1,23 +1,40 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./config/db.js')
+const verifyJwt = require('./middlewares/verifyJWT.js')
 require('dotenv').config();
-
 const app = express();
 const port = process.env.PORT || 4000;
 
 // Middleware
-app.use(cors());
+// app.use(cors({
+//   origin: 'http://localhost:3000',
+//   credentials: true,
+// }));
+
+app.use(cors())
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Routes
+
+app.use('/', require('./routes/registerRoute.js'))
+
+app.use('/', require('./routes/authRoute.js'))
+
+app.use('/', require('./routes/refreshTokenRoute.js'))
+app.use('/', require('./routes/logoutRoute.js'))
+
 app.use('/', require('./routes/songRoutes'));
 
-app.get('/test', (req, res) => {
-  res.send('Muziqa Shelf API is running!');
+
+app.get('/test', verifyJwt, (req, res) => {
+  res.json({ message: 'Test OK', userId: req.userId, username: req.username });
 });
+
 
 connectDB().then(() => {
   console.log('Database connected');

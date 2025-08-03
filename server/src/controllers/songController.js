@@ -5,7 +5,6 @@ exports.getSongs = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
   const skip = (page - 1) * limit;
-
   try {
 
     const total = await Song.countDocuments();
