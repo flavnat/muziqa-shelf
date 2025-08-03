@@ -1,10 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   align-items: stretch;
-  max-width: 700px;
   border-radius: 12px;
   overflow: hidden;
   flex-direction: row;
@@ -14,14 +12,9 @@ const Wrapper = styled.div`
     transform: translateX(0);
     pointer-events: auto;
   }
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    max-width: 100%;
-  }
 `;
 
-const Card = styled.div`
+export const Card = styled.div`
   display: flex;
   align-items: center;
   background-color: #545050;
@@ -29,15 +22,9 @@ const Card = styled.div`
   flex-grow: 1;
   padding: 12px 16px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 8px;
-  }
 `;
 
-const AlbumArt = styled.div`
+export const AlbumArt = styled.div`
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -73,7 +60,7 @@ const AlbumArt = styled.div`
   }
 `;
 
-const InfoLeft = styled.div`
+export const InfoLeft = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -85,7 +72,7 @@ const InfoLeft = styled.div`
   }
 `;
 
-const TitleAlbum = styled.div`
+export const TitleAlbum = styled.div`
   font-weight: 600;
   font-size: 1rem;
   white-space: nowrap;
@@ -97,7 +84,7 @@ const TitleAlbum = styled.div`
   }
 `;
 
-const Artist = styled.div`
+export const Artist = styled.div`
   font-size: 0.875rem;
   opacity: 0.7;
   margin-top: 4px;
@@ -110,7 +97,7 @@ const Artist = styled.div`
   }
 `;
 
-const InfoRight = styled.div`
+export const InfoRight = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -125,16 +112,12 @@ const InfoRight = styled.div`
   }
 `;
 
-const Year = styled.div`
+export const Year = styled.div`
   font-weight: 500;
   font-size: 1rem;
-
-  @media (max-width: 600px) {
-    font-size: 0.95rem;
-  }
 `;
 
-const Gener = styled.div`
+export const Gener = styled.div`
   font-size: 1rem;
   opacity: 0.7;
   margin-top: 4px;
@@ -144,7 +127,7 @@ const Gener = styled.div`
   }
 `;
 
-const ActionButton = styled.div`
+export const ActionButton = styled.div`
   width: 70px;
   background-color: #444;
   display: flex;
@@ -171,20 +154,9 @@ const ActionButton = styled.div`
     font-size: 1rem;
     width: 70px;
   }
-
-  @media (max-width: 600px) {
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    margin-top: 10px;
-    padding: 0 0 8px 0;
-  }
 `;
 
-const DeleteButton = styled.button`
+export const DeleteButton = styled.button`
   background-color: #e53935;
   color: #fff;
   border: none;
@@ -200,7 +172,7 @@ const DeleteButton = styled.button`
   }
 `;
 
-const EditButton = styled.button`
+export const EditButton = styled.button`
   background-color: #a4a1a1;
   color: #fff;
   border: none;
@@ -215,37 +187,3 @@ const EditButton = styled.button`
     background-color: #817f7f;
   }
 `;
-
-export default function SongCard({
-  title,
-  album,
-  artist,
-  year,
-  genre,
-  onEdit,
-  onDelete,
-}) {
-  return (
-    <Wrapper>
-      <Card>
-        <AlbumArt>
-          {/* <CdIcon /> */}
-        </AlbumArt>
-        <InfoLeft>
-          <TitleAlbum>
-            {title} | {album}
-          </TitleAlbum>
-          <Artist>{artist}</Artist>
-        </InfoLeft>
-        <InfoRight>
-          <Year>{year}</Year>
-          <Gener>{genre}</Gener>
-        </InfoRight>
-      </Card>
-      <ActionButton className="actions">
-        <EditButton onClick={onEdit}>Edit</EditButton>
-        <DeleteButton onClick={onDelete}>Delete</DeleteButton>
-      </ActionButton>
-    </Wrapper>
-  );
-}
