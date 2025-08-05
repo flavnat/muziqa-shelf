@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import BaseModal from "../Modal";
+import { useState } from "react";
 import Modal from "../Modal";
 import { ErrorMessage, Form, Input, SubmitButton } from "./AddSongModal.styles";
 

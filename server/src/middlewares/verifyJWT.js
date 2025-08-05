@@ -1,4 +1,3 @@
-// middleware/verifyJwt.js
 const jwt = require('jsonwebtoken');
 
 const verifyJwt = (req, res, next) => {
@@ -16,11 +15,12 @@ const verifyJwt = (req, res, next) => {
       return res.status(403).json({ message: 'Invalid or expired token.' });
     }
 
-    // ✅ Token is valid — attach user info to `req`
-    req.userId = decoded.userId;
-    req.username = decoded.username;
-
-    // Go to next middleware or route
+    // Token is valid — attach user info to `req`
+    req.user = {
+      id: decoded.userId,
+      username: decoded.username
+    };
+    
     next();
   });
 };

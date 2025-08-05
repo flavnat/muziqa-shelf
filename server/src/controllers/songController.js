@@ -1,6 +1,8 @@
+const { default: mongoose } = require('mongoose');
 const Song = require('../models/songModel');
+const handleResponse = require('../utils/handleResponse');
 
-// Get all songs with pagination
+
 exports.getSongs = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
@@ -13,17 +15,17 @@ exports.getSongs = async (req, res) => {
       .sort({ _id: -1 })
       .limit(limit)
       .skip(skip);
-
-    res.json({
+    const totalPages = Math.ceil(total / limit)
+    handleResponse(res, 200, 'Song Fetched Successfully', {
       data,
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
-    });
+      totalPages
+    })
   } catch (err) {
     console.error('Error fetching songs:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    handleResponse(res, 500, 'Internal server error');
   }
 };
 
@@ -32,16 +34,17 @@ exports.getSongById = async (req, res) => {
   try {
     const song = await Song.findById(req.params.id);
     if (song) {
-      res.json(song);
+      handleResponse(res, 200, 'Song fetched successfully', song);
     } else {
-      res.status(404).json({ message: 'Song not found' });
+      handleResponse(res, 404, 'Song not found');
+
     }
   } catch (err) {
     // Handle invalid ObjectId
     if (err.name === 'CastError') {
-      return res.status(400).json({ message: 'Invalid ID format' });
+      return handleResponse(res, 400, 'Invalid ID format');
     }
-    res.status(500).json({ error: 'Internal server error' });
+    handleResponse(res, 500, 'Internal server error');
   }
 };
 
@@ -50,13 +53,12 @@ exports.createSong = async (req, res) => {
   try {
     const song = new Song(req.body);
     const savedSong = await song.save();
-    res.status(201).json(savedSong);
+    handleResponse(res, 201, 'Song created successfully', savedSong)
   } catch (err) {
-    res.status(400).json({ error: err.message }); // Validation errors, etc.
+    handleResponse(res, 400, err.message); // Validation errors,
   }
 };
 
-// Update song by ID
 exports.updateSong = async (req, res) => {
   try {
     const song = await Song.findByIdAndUpdate(req.params.id, req.body, {
@@ -65,32 +67,64 @@ exports.updateSong = async (req, res) => {
     });
 
     if (song) {
-      res.json(song);
+      handleResponse(res, 200, 'Song updated successfully', song);
     } else {
-      res.status(404).json({ message: 'Song not found' });
+      handleResponse(res, 404, 'Song not found');
     }
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).json({ message: 'Invalid ID format' });
+      return handleResponse(res, 400, 'Invalid ID format');
     }
-    res.status(400).json({ error: err.message });
+    handleResponse(res, 400, err.message);
   }
 };
 
-// Delete song by ID
+
 exports.deleteSong = async (req, res) => {
   try {
     const song = await Song.findByIdAndDelete(req.params.id);
 
     if (song) {
-      res.json({ message: 'Song deleted' });
+      handleResponse(res, 200, 'Song deleted successfully');
     } else {
-      res.status(404).json({ message: 'Song not found' });
+      handleResponse(res, 404, 'Song not found');
     }
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).json({ message: 'Invalid ID format' });
+      return handleResponse(res, 400, 'Invalid ID format');
     }
-    res.status(500).json({ error: 'Internal server error' });
+    handleResponse(res, 500, 'Internal server error');
+  }
+};
+
+
+
+
+exports.mySongStats = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user.id); // from verifyJwt
+
+    const stats = await Song.aggregate([
+      { $match: { user: userId } },
+      {
+        $group: {
+          _id: "$genre",
+          count: { $sum: 1 },
+        }
+      },
+      { $sort: { count: -1 } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: stats
+    });
+
+  } catch (error) {
+    console.error("Aggregation error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get song stats",
+    });
   }
 };

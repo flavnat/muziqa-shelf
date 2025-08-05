@@ -36,6 +36,18 @@ app.get('/test', verifyJwt, (req, res) => {
 });
 
 
+
+// Error Handling Middleware 
+app.use((err, req, res, next) => {
+  console.error('Error stack:', err.stack);
+  res.status(500).json({
+    status: 500,
+    message: 'Something went wrong',
+    error: err.message,
+  });
+});
+
+
 connectDB().then(() => {
   console.log('Database connected');
   app.listen(port, () => {

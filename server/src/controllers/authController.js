@@ -27,7 +27,7 @@ const authController = async (req, res) => {
       { expiresIn: '3m' }
     );
 
-    // ✅ Create Refresh Token
+    // Create Refresh Token
     const refreshToken = jwt.sign(
       { userId: foundUser._id },
       process.env.JWT_REFRESH_SECRET || '',
