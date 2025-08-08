@@ -100,31 +100,213 @@ exports.deleteSong = async (req, res) => {
 
 
 
-exports.mySongStats = async (req, res) => {
+exports.getSongStats = async (req, res) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.user.id); // from verifyJwt
-
     const stats = await Song.aggregate([
-      { $match: { user: userId } },
+      // Group by genre, year, artist, and album to get counts
       {
-        $group: {
-          _id: "$genre",
-          count: { $sum: 1 },
+        $facet: {
+          byGenre: [
+            { $group: { _id: "$genre", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+          ],
+          byYear: [
+            { $group: { _id: "$year", count: { $sum: 1 } } },
+            { $sort: { _id: -1 } }
+          ],
+          byArtist: [
+            { $group: { _id: "$artist", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+          ],
+          byAlbum: [
+            { $group: { _id: "$album", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+          ],
+          totalSongs: [
+            { $count: "total" }
+          ]
         }
       },
-      { $sort: { count: -1 } }
+      // Project to clean up the output
+      {
+        $project: {
+          byGenre: {
+            $map: {
+              input: "$byGenre",
+              as: "item",
+              in: { genre: "$$item._id", count: "$$item.count" }
+            }
+          },
+          byYear: {
+            $map: {
+              input: "$byYear",
+              as: "item",
+              in: { year: "$$item._id", count: "$$item.count" }
+            }
+          },
+          byArtist: {
+            $map: {
+              input: "$byArtist",
+              as: "item",
+              in: { artist: "$$item._id", count: "$$item.count" }
+            }
+          },
+          byAlbum: {
+            $map: {
+              input: "$byAlbum",
+              as: "item",
+              in: { album: "$$item._id", count: "$$item.count" }
+            }
+          },
+          totalSongs: { $arrayElemAt: ["$totalSongs.total", 0] }
+        }
+      }
+    ]);
+
+    // Return the first document from the aggregation result
+    res.status(200).json({
+      success: true,
+      data: stats[0] || {
+        byGenre: [],
+        byYear: [],
+        byArtist: [],
+        byAlbum: [],
+        totalSongs: 0
+      }
+    });
+  } catch (error) {
+    console.error('Error in getSongStats:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching song statistics',
+      error: error.message
+    });
+  }
+};
+
+
+// Controller to get individual songs added by a user
+exports.getUserSongs = async (req, res) => {
+  try {
+    // Assume userId is passed in the request (e.g., from auth middleware or params)
+    const userId = req.user?._id || req.params.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid user ID',
+      });
+    }
+
+    const songs = await Song.find({ user: userId })
+      .select('title artist album genre year createdAt')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        songs,
+        total: songs.length
+      }
+    });
+  } catch (error) {
+    console.error('Error in getUserSongs:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching user songs',
+      error: error.message
+    });
+  }
+};
+
+
+exports.getUserSongStats = async (req, res) => {
+  try {
+    const userId = req.user.id; // Extract userId from JWT via middleware
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid user ID',
+      });
+    }
+
+    const stats = await Song.aggregate([
+      { $match: { user: new mongoose.Types.ObjectId(userId) } },
+      {
+        $facet: {
+          byGenre: [
+            { $group: { _id: "$genre", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+          ],
+          byYear: [
+            { $group: { _id: "$year", count: { $sum: 1 } } },
+            { $sort: { _id: -1 } }
+          ],
+          byArtist: [
+            { $group: { _id: "$artist", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+          ],
+          byAlbum: [
+            { $group: { _id: "$album", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+          ],
+          totalSongs: [
+            { $count: "total" }
+          ]
+        }
+      },
+      {
+        $project: {
+          byGenre: {
+            $map: {
+              input: "$byGenre",
+              as: "item",
+              in: { genre: "$$item._id", count: "$$item.count" }
+            }
+          },
+          byYear: {
+            $map: {
+              input: "$byYear",
+              as: "item",
+              in: { year: "$$item._id", count: "$$item.count" }
+            }
+          },
+          byArtist: {
+            $map: {
+              input: "$byArtist",
+              as: "item",
+              in: { artist: "$$item._id", count: "$$item.count" }
+            }
+          },
+          byAlbum: {
+            $map: {
+              input: "$byAlbum",
+              as: "item",
+              in: { album: "$$item._id", count: "$$item.count" }
+            }
+          },
+          totalSongs: { $arrayElemAt: ["$totalSongs.total", 0] }
+        }
+      }
     ]);
 
     res.status(200).json({
       success: true,
-      data: stats
+      data: stats[0] || {
+        byGenre: [],
+        byYear: [],
+        byArtist: [],
+        byAlbum: [],
+        totalSongs: 0
+      }
     });
-
   } catch (error) {
-    console.error("Aggregation error:", error);
+    console.error('Error in getUserSongStats:', error);
     res.status(500).json({
       success: false,
-      message: "Failed to get song stats",
+      message: 'Error fetching user song statistics',
+      error: error.message
     });
   }
 };

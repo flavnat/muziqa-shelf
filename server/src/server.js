@@ -14,10 +14,12 @@ const port = process.env.PORT || 4000;
 //   credentials: true,
 // }));
 
-app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(cors())
+
 
 // Routes
 
@@ -28,9 +30,9 @@ app.use('/', require('./routes/authRoute.js'))
 app.use('/', require('./routes/refreshTokenRoute.js'))
 app.use('/', require('./routes/logoutRoute.js'))
 
-app.use('/', require('./routes/songRoutes'));
+app.use('/', require('./routes/songRoute.js'));
 
-
+app.use('/', require('./routes/userRoute'))
 app.get('/test', verifyJwt, (req, res) => {
   res.json({ message: 'Test OK', userId: req.userId, username: req.username });
 });

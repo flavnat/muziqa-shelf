@@ -10,7 +10,8 @@ function* fetchSongsSaga(action) {
             axios.get,
             `http://localhost:4000/songs?limit=${limit}&page=${page}`
         );
-        yield put(getSongsSuccess(response.data));
+        yield put(getSongsSuccess(response.data.data));
+        console.log("saga return",response.data.data)
     } catch (error) {
         yield put(getSongsFailure(error.message));
     }
