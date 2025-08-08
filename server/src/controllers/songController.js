@@ -98,12 +98,9 @@ exports.deleteSong = async (req, res) => {
 };
 
 
-
-
 exports.getSongStats = async (req, res) => {
   try {
     const stats = await Song.aggregate([
-      // Group by genre, year, artist, and album to get counts
       {
         $facet: {
           byGenre: [
@@ -127,7 +124,6 @@ exports.getSongStats = async (req, res) => {
           ]
         }
       },
-      // Project to clean up the output
       {
         $project: {
           byGenre: {
@@ -163,7 +159,6 @@ exports.getSongStats = async (req, res) => {
       }
     ]);
 
-    // Return the first document from the aggregation result
     res.status(200).json({
       success: true,
       data: stats[0] || {
