@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "../Modal";
 import { ErrorMessage, Form, Input, SubmitButton } from "./AddSongModal.styles";
-
+import React from "react";
 export default function AddSongModal({ onClose, onAdd }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");

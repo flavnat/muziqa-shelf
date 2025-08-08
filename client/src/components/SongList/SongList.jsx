@@ -3,6 +3,9 @@ import SongCard from "../SongCard/SongCard";
 import { SongListContainer } from "./SongList.styles";
 
 export default function SongList({ songs, onEdit, onDelete }) {
+  if(songs.length < 0) {
+    return null
+  }
   return (
     <SongListContainer>
       {songs.map((song, index) => (
